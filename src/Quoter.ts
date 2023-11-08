@@ -2,6 +2,7 @@ export interface PriceRequest {
     inputToken: string;
     outputToken: string;
     inputAmount: string;
+    chainId: number;
 }
 export interface Calldata {
     to: string;
