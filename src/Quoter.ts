@@ -1,4 +1,5 @@
 export interface PriceRequest {
+    fromAddress: string;
     inputToken: string;
     outputToken: string;
     inputAmount: string;

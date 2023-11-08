@@ -3,26 +3,34 @@ import { PriceRequest, Quoter } from "../Quoter";
 
 export class EnsoQuoter implements Quoter {
     url: string;
+    apiKey: string;
 
     constructor({
-        url
+        url,
+        apiKey
     }: {
         url: string;
+        apiKey: string;
     }) {
         this.url = url;
+        this.apiKey = apiKey;
     }
 
-    static build({ url }: { url: string }) {
-        return new EnsoQuoter({ url });
+    static build({ url, apiKey }: { url: string, apiKey: string }) {
+        return new EnsoQuoter({ url, apiKey });
     }
 
-    async getQuote({ inputToken, outputToken, inputAmount }: PriceRequest) {
+    async getQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {
+                fromAddress,
                 tokenIn: inputToken,
                 amountIn: inputAmount,
                 tokenOut: outputToken,
                 priceImpact: true
+            },
+            headers: {
+                "Authorization": `Bearer ${this.apiKey}`
             }
         });
 
