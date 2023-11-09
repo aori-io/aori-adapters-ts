@@ -12,5 +12,6 @@ export interface Calldata {
 }
 export type Quote = { outputAmount: bigint; price: number; } & Calldata;
 export interface Quoter {
+    name: () => string;
     getQuote: ({ inputToken, outputToken, inputAmount }: PriceRequest) => Promise<Quote>;
 }

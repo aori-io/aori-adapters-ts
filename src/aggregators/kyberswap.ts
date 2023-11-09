@@ -16,6 +16,10 @@ export class KyberswapQuoter implements Quoter {
         return new KyberswapQuoter({ url });
     }
 
+    name() {
+        return "kyberswap";
+    }
+
     async getQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
         const { data } = await axios.get(`${this.url}/routes`, {
             params: {

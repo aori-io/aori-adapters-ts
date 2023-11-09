@@ -20,6 +20,10 @@ export class ZeroExQuoter implements Quoter {
         return new ZeroExQuoter({ url, apiKey });
     }
 
+    name() {
+        return "0x";
+    }
+
     async getQuote({ inputToken, outputToken, inputAmount }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {

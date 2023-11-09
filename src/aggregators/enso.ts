@@ -20,6 +20,10 @@ export class EnsoQuoter implements Quoter {
         return new EnsoQuoter({ url, apiKey });
     }
 
+    name() {
+        return "enso";
+    }
+
     async getQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {
