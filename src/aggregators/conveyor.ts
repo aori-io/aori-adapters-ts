@@ -23,7 +23,8 @@ export class ConveyorQuoter implements Quoter {
             amountIn: inputAmount,
             slippage: "50",
             chainId,
-            recipient: fromAddress
+            recipient: fromAddress,
+            partner: "Aori"
         });
 
         return {
