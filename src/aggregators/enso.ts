@@ -24,7 +24,7 @@ export class EnsoQuoter implements Quoter {
         return "enso";
     }
 
-    async getQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 fromAddress,
@@ -44,6 +44,18 @@ export class EnsoQuoter implements Quoter {
             value: data.tx.value,
             data: data.tx.data,
             price: parseFloat("0") // TODO: set price
+        }
+    }
+
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress }: PriceRequest) {
+        throw new Error("Not implemented");
+
+        return {
+            outputAmount: BigInt(0),
+            to: "",
+            value: 0,
+            data: "",
+            price: 0
         }
     }
 }

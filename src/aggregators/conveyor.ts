@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PriceRequest, Quoter } from "../Quoter";
+import { InputAmountRequest, OutputAmountRequest, Quoter } from "../Quoter";
 
 export class ConveyorQuoter implements Quoter {
     url: string;
@@ -16,7 +16,7 @@ export class ConveyorQuoter implements Quoter {
         return "conveyor";
     }
 
-    async getQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: OutputAmountRequest) {
         const { data: { body } } = await axios.post(this.url, {
             tokenIn: inputToken,
             tokenOut: outputToken,
@@ -32,6 +32,17 @@ export class ConveyorQuoter implements Quoter {
             to: body.tx.to,
             value: body.tx.value,
             data: body.tx.data,
+            price: 0
+        }
+    }
+
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: InputAmountRequest) {
+        throw new Error("Not implemented");
+        return {
+            outputAmount: BigInt(0),
+            to: "",
+            value: 0,
+            data: "",
             price: 0
         }
     }

@@ -21,7 +21,7 @@ export class ParaswapQuoter implements Quoter {
         return "paraswap";
     }
 
-    async getQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
         const { data } = await axios.get(`${this.url}/prices`, {
             params: {
                 srcToken: inputToken,
@@ -44,6 +44,18 @@ export class ParaswapQuoter implements Quoter {
 
         return {
             outputAmount: BigInt(data.priceRoute.destAmount),
+            to: "",
+            value: 0,
+            data: "",
+            price: 0
+        }
+    }
+
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: PriceRequest) {
+        throw new Error("Not implemented");
+
+        return {
+            outputAmount: BigInt(0),
             to: "",
             value: 0,
             data: "",

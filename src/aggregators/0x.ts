@@ -24,7 +24,7 @@ export class ZeroExQuoter implements Quoter {
         return "0x";
     }
 
-    async getQuote({ inputToken, outputToken, inputAmount }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 sellToken: inputToken,
@@ -43,5 +43,17 @@ export class ZeroExQuoter implements Quoter {
             data: data.data,
             price: parseFloat(data.price)
         };
+    }
+
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount }: PriceRequest) {
+        throw new Error("Not implemented");
+
+        return {
+            outputAmount: BigInt(0),
+            to: "",
+            value: 0,
+            data: "",
+            price: 0
+        }
     }
 }

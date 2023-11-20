@@ -16,7 +16,7 @@ export class OdosQuoter implements Quoter {
         return "odos";
     }
 
-    async getQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
         const { data } = await axios.post(`${this.url}/sor/quote/v2`, {
             chainId: 1,
             inputTokens: [
@@ -51,5 +51,17 @@ export class OdosQuoter implements Quoter {
             data: _data.transaction.data,
             price: parseFloat("0")
         };
+    }
+
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: PriceRequest) {
+        throw new Error("Not implemented");
+
+        return {
+            outputAmount: BigInt(0),
+            to: "",
+            value: 0,
+            data: "",
+            price: 0
+        }
     }
 }

@@ -20,7 +20,7 @@ export class KyberswapQuoter implements Quoter {
         return "kyberswap";
     }
 
-    async getQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
         const { data } = await axios.get(`${this.url}/routes`, {
             params: {
                 tokenIn: inputToken,
@@ -43,6 +43,18 @@ export class KyberswapQuoter implements Quoter {
             value: 0,
             data: _data.data.data,
             price: parseFloat("0") // TODO: 
+        }
+    }
+
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress }: PriceRequest) {
+        throw new Error("Not implemented");
+
+        return {
+            outputAmount: BigInt(0),
+            to: "",
+            value: 0,
+            data: "",
+            price: 0
         }
     }
 }
