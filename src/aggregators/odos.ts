@@ -1,6 +1,8 @@
 import axios from "axios";
 import { PriceRequest, Quoter } from "../Quoter";
 
+export const ODOS_API_URL = "https://api.odos.xyz";
+
 export class OdosQuoter implements Quoter {
 
     url: string;

@@ -1,6 +1,8 @@
 import axios from "axios";
 import { PriceRequest, Quoter } from "../Quoter";
 
+export const PARASWAP_API_URL = "https://apiv5.paraswap.io";
+
 export class ParaswapQuoter implements Quoter {
 
     url: string;

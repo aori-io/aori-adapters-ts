@@ -1,6 +1,7 @@
 import axios from "axios";
 import { InputAmountRequest, OutputAmountRequest, Quoter } from "../Quoter";
 
+export const CONVEYOR_API_URL = "https://api.conveyor.finance";
 export class ConveyorQuoter implements Quoter {
     url: string;
 
