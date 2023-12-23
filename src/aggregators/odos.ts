@@ -51,7 +51,8 @@ export class OdosQuoter implements Quoter {
             to: _data.transaction.to,
             value: _data.transaction.value,
             data: _data.transaction.data,
-            price: parseFloat("0")
+            price: parseFloat("0"),
+            gas: BigInt(_data.transaction.gas)
         };
     }
 
@@ -63,7 +64,8 @@ export class OdosQuoter implements Quoter {
             to: "",
             value: 0,
             data: "",
-            price: 0
+            price: 0,
+            gas: BigInt(0)
         }
     }
 }

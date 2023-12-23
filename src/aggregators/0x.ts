@@ -53,7 +53,8 @@ export class ZeroExQuoter implements Quoter {
             to: data.to,
             value: 0,
             data: data.data,
-            price: parseFloat(data.price)
+            price: parseFloat(data.price),
+            gas: BigInt(data.gas)
         };
     }
 
@@ -74,7 +75,8 @@ export class ZeroExQuoter implements Quoter {
             to: data.to,
             value: 0,
             data: data.data,
-            price: parseFloat(data.price)
+            price: parseFloat(data.price),
+            gas: BigInt(data.gas)
         }
     }
 }

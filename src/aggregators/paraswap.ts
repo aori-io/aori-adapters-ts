@@ -49,7 +49,8 @@ export class ParaswapQuoter implements Quoter {
             to: "",
             value: 0,
             data: "",
-            price: 0
+            price: 0,
+            gas: BigInt(0)
         }
     }
 
@@ -61,7 +62,8 @@ export class ParaswapQuoter implements Quoter {
             to: "",
             value: 0,
             data: "",
-            price: 0
+            price: 0,
+            gas: BigInt(0)
         }
     }
 }

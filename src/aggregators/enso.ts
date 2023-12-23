@@ -44,7 +44,8 @@ export class EnsoQuoter implements Quoter {
             to: data.tx.to,
             value: data.tx.value,
             data: data.tx.data,
-            price: parseFloat("0") // TODO: set price
+            price: parseFloat("0"), // TODO: set price
+            gas: BigInt(data.gas)
         }
     }
 
@@ -56,7 +57,8 @@ export class EnsoQuoter implements Quoter {
             to: "",
             value: 0,
             data: "",
-            price: 0
+            price: 0,
+            gas: BigInt(0)
         }
     }
 }

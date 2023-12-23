@@ -33,7 +33,8 @@ export class ConveyorQuoter implements Quoter {
             to: body.tx.to,
             value: body.tx.value,
             data: body.tx.data,
-            price: 0
+            price: 0,
+            gas: BigInt(body.tx.gas)
         }
     }
 
@@ -44,7 +45,8 @@ export class ConveyorQuoter implements Quoter {
             to: "",
             value: 0,
             data: "",
-            price: 0
+            price: 0,
+            gas: BigInt(0)
         }
     }
 }

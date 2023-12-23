@@ -42,7 +42,8 @@ export class KyberswapQuoter implements Quoter {
             to: _data.data.routerAddress,
             value: 0,
             data: _data.data.data,
-            price: parseFloat("0") // TODO: 
+            price: parseFloat("0"), // TODO: 
+            gas: BigInt(_data.data.gas)
         }
     }
 
@@ -54,7 +55,8 @@ export class KyberswapQuoter implements Quoter {
             to: "",
             value: 0,
             data: "",
-            price: 0
+            price: 0,
+            gas: BigInt(0)
         }
     }
 }
