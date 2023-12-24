@@ -4,4 +4,5 @@ export * from "./enso";
 export * from "./kyberswap";
 export * from "./odos";
 export * from "./paraswap";
+export * from "./socket";
 
