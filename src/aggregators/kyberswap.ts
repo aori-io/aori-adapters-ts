@@ -1,6 +1,8 @@
 import axios from "axios";
 import { PriceRequest, Quoter } from "../Quoter";
 
+export const KYBERSWAP_MAINNET_API_URL = "https://aggregator-api.kyberswap.com/ethereum/api/v1";
+export const KYBERSWAP_ARBITRUM_API_URL = "https://aggregator-api.kyberswap.com/arbitrum/api/v1";
 export class KyberswapQuoter implements Quoter {
     url: string;
 
