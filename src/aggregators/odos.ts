@@ -20,7 +20,7 @@ export class OdosQuoter implements Quoter {
 
     async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
         const { data } = await axios.post(`${this.url}/sor/quote/v2`, {
-            chainId: 1,
+            chainId,
             inputTokens: [
                 {
                     tokenAddress: inputToken,
