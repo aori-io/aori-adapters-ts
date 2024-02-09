@@ -25,14 +25,15 @@ export class EnsoQuoter implements Quoter {
         return "enso";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 fromAddress,
                 tokenIn: inputToken,
                 amountIn: inputAmount,
                 tokenOut: outputToken,
-                priceImpact: true
+                priceImpact: true,
+                chainId
             },
             headers: {
                 "Authorization": `Bearer ${this.apiKey}`
