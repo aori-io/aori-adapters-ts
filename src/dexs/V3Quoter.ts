@@ -1,6 +1,6 @@
 
 import { PriceRequest, Quoter, staticCall } from "@aori-io/sdk";
-import { Quoter__factory } from "../types";
+import { Quoter__factory, SwapRouter__factory } from "../types";
 
 export class V3Quoter implements Quoter {
     routerContractAddress: string;
