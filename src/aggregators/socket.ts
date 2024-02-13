@@ -1,5 +1,5 @@
+import { InputAmountRequest, OutputAmountRequest, Quote, Quoter } from "@aori-io/sdk";
 import axios from "axios";
-import { InputAmountRequest, OutputAmountRequest, Quote, Quoter } from "../Quoter";
 
 export const SOCKET_API_URL = "https://api.socket.tech/v2";
 

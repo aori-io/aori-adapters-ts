@@ -12,6 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@aori-io/sdk": "^0.7.67",
     "axios": "^1.6.0"
   },
   "devDependencies": {

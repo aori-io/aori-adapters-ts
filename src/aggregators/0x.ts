@@ -1,5 +1,5 @@
+import { PriceRequest, Quoter } from "@aori-io/sdk";
 import axios from "axios";
-import { PriceRequest, Quoter } from "../Quoter";
 
 export const ZEROX_MAINNET_API_URL = "https://api.0x.org/swap/v1/quote";
 export const ZEROX_SEPOLIA_API_URL = "https://sepolia.api.0x.org/swap/v1/quote";

@@ -1,5 +1,5 @@
+import { PriceRequest, Quoter } from "@aori-io/sdk";
 import axios from "axios";
-import { PriceRequest, Quoter } from "../Quoter";
 
 export const ENSO_API_URL = "https://api.enso.finance/api/v1/shortcuts/route";
 export class EnsoQuoter implements Quoter {
