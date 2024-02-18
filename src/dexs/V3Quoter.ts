@@ -96,7 +96,7 @@ export class V3Quoter implements Quoter {
                     fromAddress,
                     String(Number((Date.now() / 1000).toFixed(0)) + 60),
                     inputAmount,
-                    outputAmount,
+                    0, // amountOutMinimum = 0, caution when using!
                     String(0)
                 ]
             ]),
