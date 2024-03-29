@@ -2,7 +2,11 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Quoter } from "./Quoter";
+export type { QuoterV2 } from "./QuoterV2";
 export type { SwapRouter } from "./SwapRouter";
+export type { SwapRouter02 } from "./SwapRouter02";
 export * as factories from "./factories";
 export { Quoter__factory } from "./factories/Quoter__factory";
+export { QuoterV2__factory } from "./factories/QuoterV2__factory";
 export { SwapRouter__factory } from "./factories/SwapRouter__factory";
+export { SwapRouter02__factory } from "./factories/SwapRouter02__factory";

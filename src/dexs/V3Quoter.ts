@@ -1,6 +1,6 @@
 
 import { PriceRequest, Quoter, staticCall } from "@aori-io/sdk";
-import { Quoter__factory, SwapRouter__factory } from "../types";
+import { QuoterV2__factory, SwapRouter02__factory } from "../types";
 
 export class V3Quoter implements Quoter {
     routerContractAddress: string;
@@ -35,30 +35,37 @@ export class V3Quoter implements Quoter {
     }
 
     async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
-        const outputAmount = BigInt(await staticCall({
+        const output = await staticCall({
             to: this.quoterContractAddress,
             // @ts-ignore
-            data: Quoter__factory.createInterface().encodeFunctionData("quoteExactInputSingle", [
-                String(inputToken),
-                String(outputToken),
-                String(3000),
-                inputAmount,
-                0
-            ]),
+            data: QuoterV2__factory.createInterface().encodeFunctionData("quoteExactInputSingle", [
+                [
+                    inputToken,
+                    outputToken,
+                    inputAmount,
+                    3000,
+                    0
+                ]]),
             chainId
-        }));
+        });
+
+        const [
+            outputAmount,
+            sqrtPriceLimitX96,
+            _, // initializedTicksCrossed
+            gasEstimate
+        ] = QuoterV2__factory.createInterface().decodeFunctionResult("quoteExactInputSingle", output);
 
         return {
             to: this.routerContractAddress,
             value: 0,
             // @ts-ignore
-            data: SwapRouter__factory.createInterface().encodeFunctionData("exactInputSingle", [
+            data: SwapRouter02__factory.createInterface().encodeFunctionData("exactInputSingle", [
                 [
                     inputToken, //Take USDC
                     outputToken, //and buy WETH
-                    3000,
-                    fromAddress,
-                    String(Number((Date.now() / 1000).toFixed(0)) + 60),
+                    3000, // fee
+                    fromAddress, // recipient
                     inputAmount,
                     outputAmount,
                     String(0)
@@ -66,43 +73,49 @@ export class V3Quoter implements Quoter {
             ]),
             outputAmount,
             price: 0,
-            gas: 0n
+            gas: gasEstimate
         }
     }
 
     async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: PriceRequest) {
-        const inputAmount = BigInt(await staticCall({
+        const output = await staticCall({
             to: this.quoterContractAddress,
             // @ts-ignore
-            data: Quoter__factory.createInterface().encodeFunctionData("quoteExactOutputSingle", [
-                String(inputToken),
-                String(outputToken),
-                String(3000),
-                outputAmount,
-                0
-            ]),
+            data: QuoterV2__factory.createInterface().encodeFunctionData("quoteExactOutputSingle", [{
+                tokenIn: String(inputToken),
+                tokenOut: String(outputToken),
+                amountOut: outputAmount,
+                fee: 3000,
+                sqrtPriceLimitX96: 0
+            }]),
             chainId
-        }));
+        });
+
+        const [
+            inputAmount,
+            sqrtPriceLimitX96,
+            _, // initializedTicksCrossed
+            gasEstimate // gasEstimate
+        ] = QuoterV2__factory.createInterface().decodeFunctionResult("quoteExactOutputSingle", output);
 
         return {
             to: this.routerContractAddress,
             value: 0,
             // @ts-ignore
-            data: SwapRouter__factory.createInterface().encodeFunctionData("exactOutputSingle", [
+            data: SwapRouter02__factory.createInterface().encodeFunctionData("exactOutputSingle", [
                 [
                     inputToken, //Take USDC
                     outputToken, //and buy WETH
                     3000,
                     fromAddress,
-                    String(Number((Date.now() / 1000).toFixed(0)) + 60),
                     inputAmount,
                     0, // amountOutMinimum = 0, caution when using!
                     String(0)
                 ]
             ]),
-            outputAmount: 0n,
+            outputAmount: inputAmount,
             price: 0,
-            gas: 0n,
+            gas: gasEstimate,
         }
     }
 
