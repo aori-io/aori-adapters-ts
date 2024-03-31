@@ -118,6 +118,4 @@ export class V3Quoter implements Quoter {
             gas: gasEstimate,
         }
     }
-
-
 }
