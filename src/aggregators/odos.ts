@@ -44,8 +44,6 @@ export class OdosQuoter implements Quoter {
             pathId: data.pathId,
         });
 
-        console.log(_data);
-
         return {
             outputAmount: BigInt(_data.outputTokens[0].amount),
             to: _data.transaction.to,
