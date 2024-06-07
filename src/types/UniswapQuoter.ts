@@ -21,53 +21,7 @@ import type {
   TypedContractMethod,
 } from "./common";
 
-export declare namespace IQuoterV2 {
-  export type QuoteExactInputSingleParamsStruct = {
-    tokenIn: AddressLike;
-    tokenOut: AddressLike;
-    amountIn: BigNumberish;
-    fee: BigNumberish;
-    sqrtPriceLimitX96: BigNumberish;
-  };
-
-  export type QuoteExactInputSingleParamsStructOutput = [
-    tokenIn: string,
-    tokenOut: string,
-    amountIn: bigint,
-    fee: bigint,
-    sqrtPriceLimitX96: bigint
-  ] & {
-    tokenIn: string;
-    tokenOut: string;
-    amountIn: bigint;
-    fee: bigint;
-    sqrtPriceLimitX96: bigint;
-  };
-
-  export type QuoteExactOutputSingleParamsStruct = {
-    tokenIn: AddressLike;
-    tokenOut: AddressLike;
-    amount: BigNumberish;
-    fee: BigNumberish;
-    sqrtPriceLimitX96: BigNumberish;
-  };
-
-  export type QuoteExactOutputSingleParamsStructOutput = [
-    tokenIn: string,
-    tokenOut: string,
-    amount: bigint,
-    fee: bigint,
-    sqrtPriceLimitX96: bigint
-  ] & {
-    tokenIn: string;
-    tokenOut: string;
-    amount: bigint;
-    fee: bigint;
-    sqrtPriceLimitX96: bigint;
-  };
-}
-
-export interface QuoterV2Interface extends Interface {
+export interface UniswapQuoterInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "WETH9"
@@ -87,7 +41,7 @@ export interface QuoterV2Interface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "quoteExactInputSingle",
-    values: [IQuoterV2.QuoteExactInputSingleParamsStruct]
+    values: [AddressLike, AddressLike, BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "quoteExactOutput",
@@ -95,7 +49,7 @@ export interface QuoterV2Interface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "quoteExactOutputSingle",
-    values: [IQuoterV2.QuoteExactOutputSingleParamsStruct]
+    values: [AddressLike, AddressLike, BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "uniswapV3SwapCallback",
@@ -126,11 +80,11 @@ export interface QuoterV2Interface extends Interface {
   ): Result;
 }
 
-export interface QuoterV2 extends BaseContract {
-  connect(runner?: ContractRunner | null): QuoterV2;
+export interface UniswapQuoter extends BaseContract {
+  connect(runner?: ContractRunner | null): UniswapQuoter;
   waitForDeployment(): Promise<this>;
 
-  interface: QuoterV2Interface;
+  interface: UniswapQuoterInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -175,53 +129,37 @@ export interface QuoterV2 extends BaseContract {
 
   quoteExactInput: TypedContractMethod<
     [path: BytesLike, amountIn: BigNumberish],
-    [
-      [bigint, bigint[], bigint[], bigint] & {
-        amountOut: bigint;
-        sqrtPriceX96AfterList: bigint[];
-        initializedTicksCrossedList: bigint[];
-        gasEstimate: bigint;
-      }
-    ],
+    [bigint],
     "nonpayable"
   >;
 
   quoteExactInputSingle: TypedContractMethod<
-    [params: IQuoterV2.QuoteExactInputSingleParamsStruct],
     [
-      [bigint, bigint, bigint, bigint] & {
-        amountOut: bigint;
-        sqrtPriceX96After: bigint;
-        initializedTicksCrossed: bigint;
-        gasEstimate: bigint;
-      }
+      tokenIn: AddressLike,
+      tokenOut: AddressLike,
+      fee: BigNumberish,
+      amountIn: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish
     ],
+    [bigint],
     "nonpayable"
   >;
 
   quoteExactOutput: TypedContractMethod<
     [path: BytesLike, amountOut: BigNumberish],
-    [
-      [bigint, bigint[], bigint[], bigint] & {
-        amountIn: bigint;
-        sqrtPriceX96AfterList: bigint[];
-        initializedTicksCrossedList: bigint[];
-        gasEstimate: bigint;
-      }
-    ],
+    [bigint],
     "nonpayable"
   >;
 
   quoteExactOutputSingle: TypedContractMethod<
-    [params: IQuoterV2.QuoteExactOutputSingleParamsStruct],
     [
-      [bigint, bigint, bigint, bigint] & {
-        amountIn: bigint;
-        sqrtPriceX96After: bigint;
-        initializedTicksCrossed: bigint;
-        gasEstimate: bigint;
-      }
+      tokenIn: AddressLike,
+      tokenOut: AddressLike,
+      fee: BigNumberish,
+      amountOut: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish
     ],
+    [bigint],
     "nonpayable"
   >;
 
@@ -245,56 +183,40 @@ export interface QuoterV2 extends BaseContract {
     nameOrSignature: "quoteExactInput"
   ): TypedContractMethod<
     [path: BytesLike, amountIn: BigNumberish],
-    [
-      [bigint, bigint[], bigint[], bigint] & {
-        amountOut: bigint;
-        sqrtPriceX96AfterList: bigint[];
-        initializedTicksCrossedList: bigint[];
-        gasEstimate: bigint;
-      }
-    ],
+    [bigint],
     "nonpayable"
   >;
   getFunction(
     nameOrSignature: "quoteExactInputSingle"
   ): TypedContractMethod<
-    [params: IQuoterV2.QuoteExactInputSingleParamsStruct],
     [
-      [bigint, bigint, bigint, bigint] & {
-        amountOut: bigint;
-        sqrtPriceX96After: bigint;
-        initializedTicksCrossed: bigint;
-        gasEstimate: bigint;
-      }
+      tokenIn: AddressLike,
+      tokenOut: AddressLike,
+      fee: BigNumberish,
+      amountIn: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish
     ],
+    [bigint],
     "nonpayable"
   >;
   getFunction(
     nameOrSignature: "quoteExactOutput"
   ): TypedContractMethod<
     [path: BytesLike, amountOut: BigNumberish],
-    [
-      [bigint, bigint[], bigint[], bigint] & {
-        amountIn: bigint;
-        sqrtPriceX96AfterList: bigint[];
-        initializedTicksCrossedList: bigint[];
-        gasEstimate: bigint;
-      }
-    ],
+    [bigint],
     "nonpayable"
   >;
   getFunction(
     nameOrSignature: "quoteExactOutputSingle"
   ): TypedContractMethod<
-    [params: IQuoterV2.QuoteExactOutputSingleParamsStruct],
     [
-      [bigint, bigint, bigint, bigint] & {
-        amountIn: bigint;
-        sqrtPriceX96After: bigint;
-        initializedTicksCrossed: bigint;
-        gasEstimate: bigint;
-      }
+      tokenIn: AddressLike,
+      tokenOut: AddressLike,
+      fee: BigNumberish,
+      amountOut: BigNumberish,
+      sqrtPriceLimitX96: BigNumberish
     ],
+    [bigint],
     "nonpayable"
   >;
   getFunction(

@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import { Contract, Interface, type ContractRunner } from "ethers";
-import type { Quoter, QuoterInterface } from "../Quoter";
+import type { UniswapQuoter, UniswapQuoterInterface } from "../UniswapQuoter";
 
 const _abi = [
   {
@@ -199,12 +199,15 @@ const _abi = [
   },
 ] as const;
 
-export class Quoter__factory {
+export class UniswapQuoter__factory {
   static readonly abi = _abi;
-  static createInterface(): QuoterInterface {
-    return new Interface(_abi) as QuoterInterface;
+  static createInterface(): UniswapQuoterInterface {
+    return new Interface(_abi) as UniswapQuoterInterface;
   }
-  static connect(address: string, runner?: ContractRunner | null): Quoter {
-    return new Contract(address, _abi, runner) as unknown as Quoter;
+  static connect(
+    address: string,
+    runner?: ContractRunner | null
+  ): UniswapQuoter {
+    return new Contract(address, _abi, runner) as unknown as UniswapQuoter;
   }
 }

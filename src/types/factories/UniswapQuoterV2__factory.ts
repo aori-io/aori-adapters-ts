@@ -3,7 +3,10 @@
 /* eslint-disable */
 
 import { Contract, Interface, type ContractRunner } from "ethers";
-import type { QuoterV2, QuoterV2Interface } from "../QuoterV2";
+import type {
+  UniswapQuoterV2,
+  UniswapQuoterV2Interface,
+} from "../UniswapQuoterV2";
 
 const _abi = [
   {
@@ -273,12 +276,15 @@ const _abi = [
   },
 ] as const;
 
-export class QuoterV2__factory {
+export class UniswapQuoterV2__factory {
   static readonly abi = _abi;
-  static createInterface(): QuoterV2Interface {
-    return new Interface(_abi) as QuoterV2Interface;
+  static createInterface(): UniswapQuoterV2Interface {
+    return new Interface(_abi) as UniswapQuoterV2Interface;
   }
-  static connect(address: string, runner?: ContractRunner | null): QuoterV2 {
-    return new Contract(address, _abi, runner) as unknown as QuoterV2;
+  static connect(
+    address: string,
+    runner?: ContractRunner | null
+  ): UniswapQuoterV2 {
+    return new Contract(address, _abi, runner) as unknown as UniswapQuoterV2;
   }
 }
