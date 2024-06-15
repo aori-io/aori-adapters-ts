@@ -23,7 +23,7 @@ export class YakSwapQuoter implements Quoter {
                 inputAmount ? BigInt(inputAmount) : 0n,
                 inputToken,
                 outputToken,
-                2,
+                3,
             ]),
             chainId
         });
@@ -33,37 +33,8 @@ export class YakSwapQuoter implements Quoter {
             output
           );
           
-          console.log("Result from findBestPath:", result);
-          
-          if (result.length !== 1) {
-            console.error("Unexpected result format from findBestPath. Expected a single element, got:", result.length);
-            console.error("Result:", result);
-            throw new Error(`Unexpected result format from findBestPath. Expected a single element, got: ${result.length}`);
-          }
-          
           const [innerResult] = result;
-          
-          if (innerResult.length !== 4) {
-            console.error("Unexpected inner result format from findBestPath. Expected 4 elements, got:", innerResult.length);
-            console.error("Inner result:", innerResult);
-            throw new Error(`Unexpected inner result format from findBestPath. Expected 4 elements, got: ${innerResult.length}`);
-          }
-          
           const [amountsResult, adaptersResult, pathResult, gasEstimateResult] = innerResult;
-          
-          if (
-            !Array.isArray(amountsResult) ||
-            !Array.isArray(adaptersResult) ||
-            !Array.isArray(pathResult) ||
-            typeof gasEstimateResult !== "bigint"
-          ) {
-            console.error("Invalid inner result format from findBestPath:");
-            console.error("amountsResult:", amountsResult);
-            console.error("adaptersResult:", adaptersResult);
-            console.error("pathResult:", pathResult);
-            console.error("gasEstimateResult:", gasEstimateResult);
-            throw new Error("Invalid inner result format from findBestPath");
-          }
           
           const amounts = amountsResult.map(BigInt);
           const adapters = adaptersResult.map(String);
