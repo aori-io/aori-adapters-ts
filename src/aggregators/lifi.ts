@@ -35,7 +35,7 @@ export class LifiQuoter implements Quoter {
                 toToken: outputToken,
                 fromAmount: inputAmount,
                 fromAddress,
-                integrator: "https://aori.io",
+                integrator: "aori.io",
             },
             headers: {
                 'x-lifi-api-key': this.apiKey
