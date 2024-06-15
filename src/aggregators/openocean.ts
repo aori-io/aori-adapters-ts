@@ -1,39 +1,31 @@
 import { PriceRequest, Quoter } from "@aori-io/sdk";
 import axios from "axios";
 
-export const OPENOCEAN_API_URL = "https://open-api.openocean.finance/v4";
-
-// Token whitelist array
-const tokenWhitelist = [
-    "0x4300000000000000000000000000000000000004", 
-    "0x4300000000000000000000000000000000000003", 
-];
+export const OPENOCEAN_V3_API_URL = "https://open-api.openocean.finance/v3";
+export const OPENOCEAN_V4_API_URL = "https://open-api.openocean.finance/v4";
+export const OPENOCEAN_API_URL = OPENOCEAN_V4_API_URL;
 
 export class OpenOceanQuoter implements Quoter {
     url: string;
-    chain: string;
 
-    constructor({ url, chain }: { url: string; chain: string }) {
+    constructor({ url }: { url: string }) {
         this.url = url;
-        this.chain = chain;
     }
 
-    static build({ url, chain }: { url: string; chain: string }) {
-        return new OpenOceanQuoter({ url, chain });
+    static build({ url }: { url: string }) {
+        return new OpenOceanQuoter({ url });
     }
 
     name() {
-        return "openocean";
+        return (this.url == OPENOCEAN_V3_API_URL) ? "openocean-v3" : "openocean-v4";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress }: PriceRequest) {
-        const startTime = Date.now();
-        if (!tokenWhitelist.includes(inputToken) || !tokenWhitelist.includes(outputToken)) {
-            throw new Error("Input or output token is not on the whitelist");
-        }
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
         const inputAmountInEther = Number(inputAmount) / 1e18;
 
-        const { data } = await axios.get(`${this.url}/${this.chain}/swap`, {
+        const { data } = await axios.get(
+            `${this.url}/${chainId}/swap${this.url == OPENOCEAN_V3_API_URL ? "" : "_quote"}`,
+        {
             params: {
                 inTokenAddress: inputToken,
                 outTokenAddress: outputToken,
@@ -44,12 +36,6 @@ export class OpenOceanQuoter implements Quoter {
             }
         });
 
-        const outputAmount = BigInt(data.data.outAmount);
-        const gasEstimate = 0n;
-
-        const endTime = Date.now();
-
-        console.log(`OpenOcean OutputAmount: ${outputAmount} Time: ${endTime - startTime}ms`);
         return {
             outputAmount: BigInt(data.data.outAmount),
             to: data.data.to,
