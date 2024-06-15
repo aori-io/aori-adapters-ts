@@ -1,5 +1,6 @@
-import { PriceRequest, Quoter } from "@aori-io/sdk";
+
 import axios from "axios";
+import { PriceRequest, Quoter } from "@aori-io/sdk";
 
 export const ENSO_API_URL = "https://api.enso.finance/api/v1/shortcuts/route";
 export class EnsoQuoter implements Quoter {
@@ -33,7 +34,8 @@ export class EnsoQuoter implements Quoter {
                 amountIn: inputAmount,
                 tokenOut: outputToken,
                 priceImpact: true,
-                chainId
+                chainId,
+                routingStrategy: "router"
             },
             headers: {
                 "Authorization": `Bearer ${this.apiKey}`

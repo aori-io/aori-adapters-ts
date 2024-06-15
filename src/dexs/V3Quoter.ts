@@ -1,6 +1,5 @@
-
 import { PriceRequest, Quoter, staticCall } from "@aori-io/sdk";
-import { QuoterV2__factory, SwapRouter02__factory } from "../types";
+import { UniswapQuoterV2__factory } from "../types";
 
 export class V3Quoter implements Quoter {
     routerContractAddress: string;
@@ -54,7 +53,7 @@ export class V3Quoter implements Quoter {
             sqrtPriceLimitX96,
             _, // initializedTicksCrossed
             gasEstimate
-        ] = QuoterV2__factory.createInterface().decodeFunctionResult("quoteExactInputSingle", output);
+        ] = UniswapQuoterV2__factory.createInterface().decodeFunctionResult("quoteExactInputSingle", output);
 
         return {
             to: this.routerContractAddress,
@@ -96,7 +95,7 @@ export class V3Quoter implements Quoter {
             sqrtPriceLimitX96,
             _, // initializedTicksCrossed
             gasEstimate // gasEstimate
-        ] = QuoterV2__factory.createInterface().decodeFunctionResult("quoteExactOutputSingle", output);
+        ] = UniswapQuoterV2__factory.createInterface().decodeFunctionResult("quoteExactOutputSingle", output);
 
         return {
             to: this.routerContractAddress,
