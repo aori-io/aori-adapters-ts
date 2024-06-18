@@ -4,6 +4,7 @@ import { UniswapQuoterV2__factory } from "../types";
 export class V3Quoter implements Quoter {
     routerContractAddress: string;
     quoterContractAddress: string;
+    feeInBips: number;
 
     name() {
         return "V3";
@@ -11,25 +12,31 @@ export class V3Quoter implements Quoter {
 
     constructor({
         routerContractAddress,
-        quoterContractAddress
+        quoterContractAddress,
+        feeInBips
     }: {
         routerContractAddress: string;
         quoterContractAddress: string;
+        feeInBips: number;
     }) {
         this.quoterContractAddress = quoterContractAddress;
         this.routerContractAddress = routerContractAddress;
+        this.feeInBips = feeInBips;
     }
 
     static build({
         routerContractAddress,
-        quoterContractAddress
+        quoterContractAddress,
+        feeInBips = 3000
     }: {
         routerContractAddress: string;
         quoterContractAddress: string;
+        feeInBips?: number;
     }) {
         return new V3Quoter({
             routerContractAddress,
-            quoterContractAddress
+            quoterContractAddress,
+            feeInBips
         });
     }
 
@@ -42,7 +49,7 @@ export class V3Quoter implements Quoter {
                     inputToken,
                     outputToken,
                     inputAmount,
-                    3000,
+                    this.feeInBips,
                     0
                 ]]),
             chainId
@@ -63,7 +70,7 @@ export class V3Quoter implements Quoter {
                 [
                     inputToken, //Take USDC
                     outputToken, //and buy WETH
-                    3000, // fee
+                    this.feeInBips, // fee
                     fromAddress, // recipient
                     inputAmount,
                     outputAmount,
@@ -84,7 +91,7 @@ export class V3Quoter implements Quoter {
                 tokenIn: String(inputToken),
                 tokenOut: String(outputToken),
                 amountOut: outputAmount,
-                fee: 3000,
+                fee: this.feeInBips,
                 sqrtPriceLimitX96: 0
             }]),
             chainId
@@ -105,7 +112,7 @@ export class V3Quoter implements Quoter {
                 [
                     inputToken, //Take USDC
                     outputToken, //and buy WETH
-                    3000,
+                    this.feeInBips,
                     fromAddress,
                     inputAmount,
                     0, // amountOutMinimum = 0, caution when using!
