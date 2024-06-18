@@ -24,7 +24,7 @@ export class OpenOceanQuoter implements Quoter {
         const inputAmountInEther = Number(inputAmount) / 1e18;
 
         const { data } = await axios.get(
-            `${this.url}/${chainId}/swap${this.url == OPENOCEAN_V3_API_URL ? "" : "_quote"}`,
+            `${this.url}/${chainId}/swap${this.url == OPENOCEAN_V4_API_URL ? "" : "_quote"}`,
         {
             params: {
                 inTokenAddress: inputToken,
