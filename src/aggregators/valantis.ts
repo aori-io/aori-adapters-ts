@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PriceRequest, Quoter } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quoter } from "@aori-io/sdk";
 
 export const VALANTIS_HOT_API_URL = "https://hot.valantis.xyz/solver/order";
 
@@ -87,9 +87,6 @@ export class ValantisQuoter implements Quoter {
 
         return {
             outputAmount: (AMOUNT_OUT - BigInt(750)),
-            to: data.pool_address,
-            value: 0,
-            data: data.signed_payload,
             price: parseFloat("0"),
             gas: BigInt(0)
         };
@@ -126,11 +123,44 @@ export class ValantisQuoter implements Quoter {
 
         return {
             outputAmount: amountIn,
-            to: data.pool_address,
-            value: 0,
-            data: data.signed_payload,
             price: parseFloat("0"),
             gas: BigInt(0)
+        };
+    }
+
+    async generateCalldata({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
+        if (!outputAmount) {
+            throw new Error("outputAmount is required");
+        }
+
+        const amountOutBigInt = BigInt(outputAmount);
+        const amountIn = await fetchAmountOut(outputToken, inputToken, amountOutBigInt);
+
+        const requestBody = {
+            authorized_recipient: fromAddress,
+            authorized_sender: fromAddress,
+            chain_id: chainId,
+            request_expiry: Math.ceil(Date.now() / 1000) + 30,
+            quote_expiry: Math.ceil(Date.now() / 1000) + 120,
+            token_in: inputToken,
+            token_out: outputToken,
+            volume_token_in: amountIn.toString(),
+            volume_token_out_min: outputAmount
+        };
+
+        const { data } = await axios.post(this.url, requestBody, {
+            headers: {
+                "X-API-Key": `${this.apiKey}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+
+        return {
+            outputAmount: amountIn,
+            to: data.pool_address,
+            value: 0,
+            data: data.signed_payload
         };
     }
 }

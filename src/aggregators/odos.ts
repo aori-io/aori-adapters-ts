@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { PriceRequest, Quoter } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quoter } from "@aori-io/sdk";
 
 export const ODOS_API_URL = "https://api.odos.xyz";
 
@@ -47,9 +47,6 @@ export class OdosQuoter implements Quoter {
 
         return {
             outputAmount: BigInt(_data.outputTokens[0].amount),
-            to: _data.transaction.to,
-            value: _data.transaction.value,
-            data: _data.transaction.data,
             price: parseFloat("0"),
             gas: BigInt(_data.transaction.gas)
         };
@@ -66,5 +63,39 @@ export class OdosQuoter implements Quoter {
             price: 0,
             gas: BigInt(0)
         }
+    }
+
+    async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
+        const { data } = await axios.post(`${this.url}/sor/quote/v2`, {
+            chainId,
+            inputTokens: [
+                {
+                    tokenAddress: inputToken,
+                    amount: inputAmount,
+                }
+            ],
+            outputTokens: [
+                {
+                    tokenAddress: outputToken,
+                    proportion: 1
+                }
+            ],
+            userAddr: fromAddress,
+            slippageLimitPercent: 0.3,
+            referralCode: 0,
+            compact: true,
+        });
+
+        const { data: _data } = await axios.post(`${this.url}/sor/assemble`, {
+            userAddr: fromAddress,
+            pathId: data.pathId,
+        });
+
+        return {
+            outputAmount: BigInt(_data.outputTokens[0].amount),
+            to: _data.transaction.to,
+            value: _data.transaction.value,
+            data: _data.transaction.data
+        };
     }
 }

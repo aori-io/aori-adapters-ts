@@ -61,5 +61,13 @@ export const oneForOneQuoterFactory: ((tokenA: string, tokenB: string) => Quoter
                 data: ""
             }
         }
+    },
+    generateCalldata: async ({ inputToken, outputToken, inputAmount, chainId }) => {
+        return {
+            outputAmount: BigInt(inputAmount),
+            to: "",
+            value: 0,
+            data: ""
+        }
     }
 });

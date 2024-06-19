@@ -64,4 +64,14 @@ export class LifiQuoter implements Quoter {
             gas: BigInt(0)
         }
     }
+
+    async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
+        const { outputAmount, to, value, data } = await this.getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }); 
+        return {
+            to,
+            value,
+            data,
+            outputAmount
+        }
+    }
 }

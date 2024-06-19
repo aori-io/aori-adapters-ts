@@ -1,4 +1,4 @@
-import { InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
 
 export type Mode = "fast" | "best";
 
@@ -21,46 +21,33 @@ export class MultiQuoter implements Quoter {
 
     async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: OutputAmountRequest) {
         const allQuotes = this.quoters.map(quoter => quoter.getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }));
-        if (this.mode == "fast") {
-            try {
-                return await Promise.any(allQuotes);
-            } catch (error) {
-                return { price: 0, gas: 0n, outputAmount: 0n, to: "", value: 0, data: "" };
-            }
+        try {
+            return await Promise.any(allQuotes);
+        } catch (error) {
+            return { price: 0, gas: 0n, outputAmount: 0n };
         }
-
-        const responses = await Promise.allSettled(allQuotes); 
-
-        // Out of those that were successful, return the one with the highest output amount
-        const bestQuote = responses.reduce((best, response) => {
-            if (response.status == "fulfilled" && response.value.outputAmount > best.outputAmount) {
-                return response.value;
-            }
-            return best;
-        }, { price: 0, gas: 0n, outputAmount: 0n, to: "", value: 0, data: "" });
-
-        return bestQuote;
     }
 
     async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: InputAmountRequest) {
         const allQuotes = this.quoters.map(quoter => quoter.getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }));
-        if (this.mode == "fast") {
-            try {
-                return await Promise.any(allQuotes);
-            } catch (error) {
-                return { price: 0, gas: 0n, outputAmount: 0n, to: "", value: 0, data: "" };
-            }
+        try {
+            return await Promise.any(allQuotes);
+        } catch (error) {
+            return { price: 0, gas: 0n, outputAmount: 0n };
         }
+    }
 
+    async generateCalldata({ inputToken, outputToken, inputAmount, outputAmount, fromAddress, chainId }: OutputAmountRequest) { 
+        const allQuotes = this.quoters.map(quoter => quoter.generateCalldata({ inputToken, outputToken, inputAmount, outputAmount, fromAddress, chainId }));
         const responses = await Promise.allSettled(allQuotes); 
 
         // Out of those that were successful, return the one with the lowest input (output) amount
         const bestQuote = responses.reduce((best, response) => {
-            if (response.status == "fulfilled" && response.value.outputAmount < best.outputAmount) {
+            if (response.status == "fulfilled") {
                 return response.value;
             }
             return best;
-        }, { price: 0, gas: 0n, outputAmount: 0n, to: "", value: 0, data: "" });
+        }, { outputAmount: 0n, to: "", value: 0, data: "" });
 
         return bestQuote;
     }

@@ -1,4 +1,4 @@
-import { PriceRequest, Quoter } from "@aori-io/sdk";
+import { OutputAmountRequest, PriceRequest, Quoter } from "@aori-io/sdk";
 import axios from "axios";
 
 export const ZEROX_MAINNET_API_URL = "https://api.0x.org/swap/v1/quote";
@@ -77,6 +77,26 @@ export class ZeroExQuoter implements Quoter {
             data: data.data,
             price: parseFloat(data.price),
             gas: BigInt(data.gas)
+        }
+    }
+
+    async generateCalldata({ inputToken, outputToken, inputAmount, outputAmount, fromAddress, chainId }: OutputAmountRequest) {
+        const { data } = await axios.get(this.url, {
+            params: {
+                sellToken: inputToken,
+                buyAmount: outputAmount,
+                buyToken: outputToken
+            },
+            headers: {
+                '0x-api-key': this.apiKey
+            },
+        });
+
+        return {
+            to: data.to,
+            value: 0,
+            data: data.data,
+            outputAmount: BigInt(data.buyAmount),
         }
     }
 }

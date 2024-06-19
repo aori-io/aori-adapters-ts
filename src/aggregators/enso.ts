@@ -64,4 +64,28 @@ export class EnsoQuoter implements Quoter {
             gas: BigInt(0)
         }
     }
+
+    async generateCalldata({ inputToken, outputToken, inputAmount, outputAmount, fromAddress, chainId }: PriceRequest) {
+        const { data } = await axios.get(this.url, {
+            params: {
+                fromAddress,
+                tokenIn: inputToken,
+                amountIn: inputAmount,
+                tokenOut: outputToken,
+                priceImpact: true,
+                chainId,
+                routingStrategy: "router"
+            },
+            headers: {
+                "Authorization": `Bearer ${this.apiKey}`
+            }
+        });
+
+        return {
+            to: data.tx.to,
+            value: data.tx.value,
+            data: data.tx.data,
+            outputAmount: BigInt(data.amountOut),
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { getTokenBalance, Quoter } from "@aori-io/sdk";
+import { Calldata, getTokenBalance, Quoter } from "@aori-io/sdk";
 
 export const xykQuoterFactory: ((address: string, chainId?: number, tokenA?: string, tokenB?: string) => Quoter) = (address, chainId, tokenA, tokenB) => ({
     name: () => "XYKMaker",
@@ -39,5 +39,21 @@ export const xykQuoterFactory: ((address: string, chainId?: number, tokenA?: str
         const newInputAmount = (BigInt(inputBalance) * BigInt(outputBalance)) / (outputBalance - BigInt(outputAmount));
 
         return { outputAmount: newInputAmount - inputBalance, to: "", value: 0, data: "", price: 0, gas: 0n }
+    },
+    generateCalldata: async ({ inputToken, outputToken, inputAmount, chainId: _chainId }): Promise<Calldata> => {
+        if (tokenA != undefined && tokenB != undefined && (tokenA != inputToken && tokenB != outputToken) || (tokenB != inputToken && tokenA != outputToken) || (chainId != undefined && chainId != _chainId)) {
+            return {
+                outputAmount: 0n,
+                to: "",
+                value: 0,
+                data: ""
+            }
+        }
+
+        const inputBalance = await getTokenBalance(_chainId, address, inputToken);
+        const outputBalance = await getTokenBalance(_chainId, address, outputToken);
+        const newOutputAmount = (BigInt(inputBalance) * BigInt(outputBalance)) / (inputBalance - BigInt(inputAmount));
+
+        return { outputAmount: newOutputAmount - outputBalance, to: "", value: 0, data: "" }
     }
 });

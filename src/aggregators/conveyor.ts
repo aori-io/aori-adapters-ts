@@ -49,4 +49,23 @@ export class ConveyorQuoter implements Quoter {
             gas: BigInt(0)
         }
     }
+
+    async generateCalldata({ inputToken, outputToken, inputAmount, outputAmount, fromAddress, chainId }: OutputAmountRequest) {
+        const { data: { body } } = await axios.post(this.url, {
+            tokenIn: inputToken,
+            tokenOut: outputToken,
+            amountIn: inputAmount,
+            slippage: "50",
+            chainId,
+            recipient: fromAddress,
+            partner: "Aori"
+        });
+
+        return {
+            to: body.tx.to,
+            value: body.tx.value,
+            data: body.tx.data,
+            outputAmount: BigInt(body.info.amountOut),
+        }
+    }
 }

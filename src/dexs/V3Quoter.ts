@@ -1,4 +1,4 @@
-import { PriceRequest, Quoter, staticCall } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quoter, staticCall } from "@aori-io/sdk";
 import { UniswapQuoterV2__factory } from "../types";
 
 export class V3Quoter implements Quoter {
@@ -122,6 +122,47 @@ export class V3Quoter implements Quoter {
             outputAmount: inputAmount,
             price: 0,
             gas: gasEstimate,
+        }
+    }
+
+    async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
+        const output = await staticCall({
+            to: this.quoterContractAddress,
+            // @ts-ignore
+            data: QuoterV2__factory.createInterface().encodeFunctionData("quoteExactInputSingle", [
+                [
+                    inputToken,
+                    outputToken,
+                    inputAmount,
+                    this.feeInBips,
+                    0
+                ]]),
+            chainId
+        });
+
+        const [
+            outputAmount,
+            sqrtPriceLimitX96,
+            _, // initializedTicksCrossed
+            gasEstimate
+        ] = UniswapQuoterV2__factory.createInterface().decodeFunctionResult("quoteExactInputSingle", output);
+
+        return {
+            to: this.routerContractAddress,
+            value: 0,
+            // @ts-ignore
+            data: SwapRouter02__factory.createInterface().encodeFunctionData("exactInputSingle", [
+                [
+                    inputToken, //Take USDC
+                    outputToken, //and buy WETH
+                    this.feeInBips, // fee
+                    fromAddress, // recipient
+                    inputAmount,
+                    outputAmount,
+                    String(0)
+                ]
+            ]),
+            outputAmount
         }
     }
 }

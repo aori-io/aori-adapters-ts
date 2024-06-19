@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
 
 export const OOGABOOGA_SWAP_API_URL = "https://testnet.api.oogabooga.io/v1/swap/";
 
@@ -43,9 +43,6 @@ export class OogaBoogaQuoter implements Quoter {
 
         return {
             outputAmount: BigInt(assumedAmountOut),
-            to: tx.to,
-            value: Number(tx.value),
-            data: tx.data as `0x${string}`,
             price: parseFloat(price),
             gas: BigInt(0),
         };
@@ -57,11 +54,37 @@ export class OogaBoogaQuoter implements Quoter {
 
         return {
             outputAmount: BigInt(0),
-            to: "",
-            value: 0,
-            data: "",
             price: 0,
             gas: BigInt(0),
+        };
+    }
+
+    async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
+        if (!inputAmount) {
+            throw new Error("inputAmount is required");
+        }
+
+        const headers = {
+            Authorization: `Bearer ${this.apiKey}`,
+        };
+
+        const params = {
+            tokenIn: inputToken,
+            from: fromAddress,
+            amount: inputAmount.toString(),
+            tokenOut: outputToken,
+            to: fromAddress,
+            slippage: 0.01.toString(),
+        };
+
+        const res = await axios.get(this.url, { headers, params });
+        const { tx, assumedAmountOut, price } = res.data;
+
+        return {
+            outputAmount: BigInt(assumedAmountOut),
+            to: tx.to,
+            value: Number(tx.value),
+            data: tx.data as `0x${string}`,
         };
     }
 }
