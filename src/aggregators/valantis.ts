@@ -46,7 +46,6 @@ async function fetchAmountOut(tokenInAddress: string, tokenOutAddress: string, a
 
         // Adjusting for scale factor
         return amountOut / scaleFactor;
-        // return BigInt(0);
     } catch (error) {
         console.error('Error fetching amount out:', error);
         console.error('Token In Address:', tokenInAddress);
