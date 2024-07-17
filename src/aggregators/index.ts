@@ -11,3 +11,4 @@ export * from "./socket";
 export * from "./valantis";
 export * from "./dexalot";
 export * from "./bebop";
+export * from "./swing";
