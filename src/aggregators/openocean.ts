@@ -31,7 +31,7 @@ export class OpenOceanQuoter implements Quoter {
                 outTokenAddress: outputToken,
                 amount: inputAmountInEther,
                 gasPrice: 10,
-                slippage: 1,
+                slippage: 0.1,
                 account: fromAddress,                
             }
         });
@@ -67,7 +67,7 @@ export class OpenOceanQuoter implements Quoter {
                 outTokenAddress: outputToken,
                 amount: inputAmountInEther,
                 gasPrice: 10,
-                slippage: 1,
+                slippage: 0.1,
                 account: fromAddress,                
             }
         });
