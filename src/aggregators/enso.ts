@@ -53,7 +53,7 @@ export class EnsoQuoter implements Quoter {
     }
 
     async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress }: PriceRequest) {
-        throw new Error("Not implemented");
+        throw new Error("Doesn't support output -> input just yet");
 
         return {
             outputAmount: BigInt(0),

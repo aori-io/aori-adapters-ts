@@ -84,8 +84,9 @@ export class ZeroExQuoter implements Quoter {
         const { data } = await axios.get(this.url, {
             params: {
                 sellToken: inputToken,
-                buyAmount: outputAmount,
-                buyToken: outputToken
+                buyToken: outputToken,
+                ...(inputAmount ? { sellAmount: inputAmount } : {}),
+                ...(outputAmount ? { buyAmount: outputAmount } : {}),
             },
             headers: {
                 '0x-api-key': this.apiKey
@@ -96,7 +97,7 @@ export class ZeroExQuoter implements Quoter {
             to: data.to,
             value: 0,
             data: data.data,
-            outputAmount: BigInt(data.buyAmount),
+            outputAmount: BigInt(data.buyAmount || data.sellAmount),
         }
     }
 }

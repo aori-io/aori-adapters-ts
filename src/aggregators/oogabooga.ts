@@ -49,8 +49,7 @@ export class OogaBoogaQuoter implements Quoter {
     }
 
     async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest): Promise<Quote> {
-        // Implementation of getInputAmountQuote can be added here
-        throw new Error("Not implemented");
+        throw new Error("Doesn't support output -> input just yet");
 
         return {
             outputAmount: BigInt(0),

@@ -39,7 +39,7 @@ export class ConveyorQuoter implements Quoter {
     }
 
     async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: InputAmountRequest) {
-        throw new Error("Not implemented");
+        throw new Error("Doesn't support output -> input just yet");
         return {
             outputAmount: BigInt(0),
             to: "",
