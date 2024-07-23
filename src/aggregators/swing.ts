@@ -2,8 +2,8 @@
 import axios from "axios";
 import { PriceRequest, Quoter } from "@aori-io/sdk";
 
-const SWING_ROUTE_API_URL = "https://swap.prod.swing.xyz/v0/transfer/quote";
-const SWING_APPROVAL_API_URL = "https://swap.prod.swing.xyz/v0/transfer/approve";
+const SWING_QUOTE_API_URL = "https://platform.swing.xyz/api/v1/projects/aori-io/quote";
+const SWING_APPROVAL_API_URL = "https://platform.swing.xyz/api/v1/projects/aori-io/approve";
 const SWING_LOCATION_RESTRICTED_API_URL = "https://swap.prod.swing.xyz/v0/transfer/config/location";
 
 export class SwingQuoter implements Quoter {
@@ -17,13 +17,13 @@ export class SwingQuoter implements Quoter {
     }
 
     async getChainSlug(chainId: string) {
-        const chainsResponse = await axios.get('https://platform.swing.xyz/api/v1/chains');
+        const chainsResponse = await axios.get('https://platform.swing.xyz/api/v1/projects/aori-io/chains');
         const chainSlug = chainsResponse.data.find((chain: any) => chain.id === chainId).slug;
         return chainSlug;
     }
 
     async getTokenSymbol(tokenAddress: string) {
-        const tokensResponse = await axios.get('https://platform.swing.xyz/api/v1/tokens');
+        const tokensResponse = await axios.get('https://platform.swing.xyz/api/v1/projects/aori-io/tokens');
         const tokenSymbol = tokensResponse.data.find((token: any) => token.address === tokenAddress).symbol;
         return tokenSymbol;
     }
@@ -40,7 +40,7 @@ export class SwingQuoter implements Quoter {
         const outputTokenSymbol = await this.getTokenSymbol(outputToken);
 
         const routeResult = await axios.get(
-            SWING_ROUTE_API_URL,
+            SWING_QUOTE_API_URL,
             {
               params: {
                 fromChain: chainSlug,
@@ -55,6 +55,7 @@ export class SwingQuoter implements Quoter {
                 toUserAddress: fromAddress,
                 tokenAmount: inputAmount,
                 contractCall: true,
+                projectId: "aori-io",
               }
             }
         );
@@ -90,7 +91,7 @@ export class SwingQuoter implements Quoter {
         const inputTokenSymbol = await this.getTokenSymbol(inputToken);
         const outputTokenSymbol = await this.getTokenSymbol(outputToken);
 
-        const routeResult = await axios.get(SWING_ROUTE_API_URL, {
+        const routeResult = await axios.get(SWING_QUOTE_API_URL, {
             params: {
                 fromChain: chainSlug,
                 tokenSymbol: inputTokenSymbol,
@@ -102,6 +103,7 @@ export class SwingQuoter implements Quoter {
                 toUserAddress: fromAddress,
                 tokenAmount: inputAmount,
                 contractCall: true,
+                projectId: "aori-io",
             }
         });
 
