@@ -35,7 +35,7 @@ export class OdosQuoter implements Quoter {
                 }
             ],
             userAddr: fromAddress,
-            slippageLimitPercent: 0.3,
+            slippageLimitPercent: 0.1,
             referralCode: 0,
             compact: true,
         });
