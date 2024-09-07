@@ -1,17 +1,19 @@
-import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, ChainId, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
 
 export type Mode = "fast" | "best";
 
+export type QuoterMap = Map<number | ChainId, Quoter[]>;
+
 export class MultiQuoter implements Quoter {
-    quoters: Map<number, Quoter[]>;
+    quoters: QuoterMap;
     mode: Mode;
 
-    constructor(quoters: Map<number, Quoter[]>, mode: Mode = "fast") {
+    constructor(quoters: QuoterMap, mode: Mode = "fast") {
         this.quoters = quoters;
         this.mode = mode;
     }
 
-    static build(quoters: Map<number, Quoter[]>) {
+    static build(quoters: QuoterMap) {
         return new MultiQuoter(quoters);
     }
 
