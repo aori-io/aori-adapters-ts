@@ -17,7 +17,7 @@ export class YakSwapQuoter implements Quoter {
     }
 
     async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
-        const output = await staticCall({
+        const output = await staticCall(chainId, {
             to: this.routerContractAddress,
             data: YakRouter__factory.createInterface().encodeFunctionData("findBestPath", [
                 inputAmount ? BigInt(inputAmount) : 0n,
@@ -76,7 +76,7 @@ export class YakSwapQuoter implements Quoter {
     }
 
     async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
-        const output = await staticCall({
+        const output = await staticCall(chainId, {
             to: this.routerContractAddress,
             data: YakRouter__factory.createInterface().encodeFunctionData("findBestPath", [
                 inputAmount ? BigInt(inputAmount) : 0n,

@@ -41,7 +41,7 @@ export class V3Quoter implements Quoter {
     }
 
     async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
-        const output = await staticCall({
+        const output = await staticCall(chainId, {
             to: this.quoterContractAddress,
             // @ts-ignore
             data: QuoterV2__factory.createInterface().encodeFunctionData("quoteExactInputSingle", [
@@ -84,7 +84,7 @@ export class V3Quoter implements Quoter {
     }
 
     async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: PriceRequest) {
-        const output = await staticCall({
+        const output = await staticCall(chainId, {
             to: this.quoterContractAddress,
             // @ts-ignore
             data: QuoterV2__factory.createInterface().encodeFunctionData("quoteExactOutputSingle", [{
@@ -126,7 +126,7 @@ export class V3Quoter implements Quoter {
     }
 
     async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
-        const output = await staticCall({
+        const output = await staticCall(chainId, {
             to: this.quoterContractAddress,
             // @ts-ignore
             data: QuoterV2__factory.createInterface().encodeFunctionData("quoteExactInputSingle", [
