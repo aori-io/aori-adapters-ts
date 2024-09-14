@@ -1,23 +1,26 @@
 import { Calldata, PriceRequest, Quoter, staticCall } from "@aori-io/sdk";
 import { YakRouter, YakRouter__factory } from "../types";
+import { JsonRpcProvider } from "ethers";
 
 export class YakSwapQuoter implements Quoter {
     routerContractAddress: string;
+    provider?: JsonRpcProvider;
 
     name() {
         return "YakSwap";
     }
 
-    constructor({ routerContractAddress }: { routerContractAddress: string }) {
+    constructor({ routerContractAddress, provider }: { routerContractAddress: string, provider?: JsonRpcProvider }) {
         this.routerContractAddress = routerContractAddress;
+        this.provider = provider;
     }
 
-    static build({ routerContractAddress }: { routerContractAddress: string }) {
-        return new YakSwapQuoter({ routerContractAddress });
+    static build({ routerContractAddress, provider }: { routerContractAddress: string, provider?: JsonRpcProvider }) {
+        return new YakSwapQuoter({ routerContractAddress, provider });
     }
 
     async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
-        const output = await staticCall(chainId, {
+        const output = await staticCall(this.provider ?? chainId, {
             to: this.routerContractAddress,
             data: YakRouter__factory.createInterface().encodeFunctionData("findBestPath", [
                 inputAmount ? BigInt(inputAmount) : 0n,
@@ -76,7 +79,7 @@ export class YakSwapQuoter implements Quoter {
     }
 
     async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
-        const output = await staticCall(chainId, {
+        const output = await staticCall(this.provider ?? chainId, {
             to: this.routerContractAddress,
             data: YakRouter__factory.createInterface().encodeFunctionData("findBestPath", [
                 inputAmount ? BigInt(inputAmount) : 0n,

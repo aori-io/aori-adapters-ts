@@ -13,7 +13,8 @@
   "license": "MIT",
   "dependencies": {
     "@aori-io/sdk": "^1.0.22",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "ethers": "^6.13.2"
   },
   "devDependencies": {
     "@typechain/ethers-v6": "^0.5.1",
