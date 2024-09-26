@@ -1,15 +1,35 @@
 import axios from "axios";
-import { Calldata, PriceRequest, Quoter } from "@aori-io/sdk";
+import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
 
 export const VALANTIS_HOT_API_URL = "https://hot.valantis.xyz/solver/order";
 
-async function fetchAmountOut(tokenInAddress: string, tokenOutAddress: string, amountIn: bigint): Promise<bigint> {
+async function fetchAmountOut(tokenInAddress: string, tokenOutAddress: string, amountIn: bigint, chainId: number): Promise<bigint> {
     try {
-        const responseIn = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${tokenInAddress}&vs_currencies=usd`);
-        const responseOut = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${tokenOutAddress}&vs_currencies=usd`);
+        const asset_platforms_list = await axios.get(`https://api.coingecko.com/api/v3/asset_platforms`);
+        let chain_identifier;
+        for (const platform of asset_platforms_list.data) {
+            if (platform.chain_identifier === chainId) {
+                chain_identifier = platform.id;
+            }
+        }
 
-        const priceInUSD = responseIn.data[tokenInAddress.toLowerCase()].usd;
-        const priceOutUSD = responseOut.data[tokenOutAddress.toLowerCase()].usd;
+        const responseIn = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/${chain_identifier}?contract_addresses=${tokenInAddress}&vs_currencies=usd`);
+        const responseOut = await axios.get(`https://api.coingecko.com/api/v3/simple/token_price/${chain_identifier}?contract_addresses=${tokenOutAddress}&vs_currencies=usd`);
+
+
+        if (!responseIn.data || !responseOut.data) {
+            throw new Error('Empty response from CoinGecko API');
+        }
+
+        const tokenInData = responseIn.data[tokenInAddress.toLowerCase()];
+        const tokenOutData = responseOut.data[tokenOutAddress.toLowerCase()];
+
+        if (!tokenInData || !tokenOutData) {
+            throw new Error('Token data not found in CoinGecko response');
+        }
+
+        const priceInUSD = tokenInData.usd;
+        const priceOutUSD = tokenOutData.usd;
 
         if (priceInUSD === undefined || priceOutUSD === undefined) {
             throw new Error('Price data is not available for one of the tokens');
@@ -28,6 +48,8 @@ async function fetchAmountOut(tokenInAddress: string, tokenOutAddress: string, a
         return amountOut / scaleFactor;
     } catch (error) {
         console.error('Error fetching amount out:', error);
+        console.error('Token In Address:', tokenInAddress);
+        console.error('Token Out Address:', tokenOutAddress);
         throw error;
     }
 }
@@ -55,12 +77,12 @@ export class ValantisQuoter implements Quoter {
         return "valantis";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: OutputAmountRequest): Promise<Quote> {
         if (!inputAmount) {
             throw new Error("inputAmount is required");
         }
 
-        const AMOUNT_OUT = await fetchAmountOut(inputToken, outputToken, BigInt(inputAmount));
+        const AMOUNT_OUT = await fetchAmountOut(inputToken, outputToken, BigInt(inputAmount), chainId);
 
         const requestBody = {
             authorized_recipient: fromAddress,
@@ -72,8 +94,8 @@ export class ValantisQuoter implements Quoter {
             request_expiry: Math.ceil(Date.now() / 1000) + 30,
             token_in: inputToken,
             token_out: outputToken,
-            volume_token_in: inputAmount,
-            volume_token_out_min: (AMOUNT_OUT - BigInt(750)).toString(),
+            amount_in: inputAmount,
+            amount_out_requested: (AMOUNT_OUT - BigInt(750)).toString(),
         };
 
         const { data } = await axios.post(this.url, requestBody, {
@@ -84,22 +106,24 @@ export class ValantisQuoter implements Quoter {
             }
         });
 
-
         return {
-            outputAmount: (AMOUNT_OUT - BigInt(750)),
+            outputAmount: BigInt(data.volume_token_out),
             price: parseFloat("0"),
-            gas: BigInt(0)
+            gas: BigInt(0),
         };
-    
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: InputAmountRequest): Promise<Quote> {
+        throw new Error("getInputAmountQuote is not implemented for Valantis");
+    }
+
+    async generateCalldata({ inputToken, outputToken, outputAmount, fromAddress, chainId }: OutputAmountRequest): Promise<Calldata> {
         if (!outputAmount) {
             throw new Error("outputAmount is required");
         }
 
         const amountOutBigInt = BigInt(outputAmount);
-        const amountIn = await fetchAmountOut(outputToken, inputToken, amountOutBigInt);
+        const amountIn = await fetchAmountOut(outputToken, inputToken, amountOutBigInt, chainId);
 
         const requestBody = {
             authorized_recipient: fromAddress,
@@ -109,8 +133,8 @@ export class ValantisQuoter implements Quoter {
             quote_expiry: Math.ceil(Date.now() / 1000) + 120,
             token_in: inputToken,
             token_out: outputToken,
-            volume_token_in: amountIn.toString(),
-            volume_token_out_min: outputAmount
+            amount_in: amountIn.toString(),
+            amount_out_requested: outputAmount
         };
 
         const { data } = await axios.post(this.url, requestBody, {
@@ -122,42 +146,7 @@ export class ValantisQuoter implements Quoter {
         });
 
         return {
-            outputAmount: amountIn,
-            price: parseFloat("0"),
-            gas: BigInt(0)
-        };
-    }
-
-    async generateCalldata({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest): Promise<Calldata> {
-        if (!outputAmount) {
-            throw new Error("outputAmount is required");
-        }
-
-        const amountOutBigInt = BigInt(outputAmount);
-        const amountIn = await fetchAmountOut(outputToken, inputToken, amountOutBigInt);
-
-        const requestBody = {
-            authorized_recipient: fromAddress,
-            authorized_sender: fromAddress,
-            chain_id: chainId,
-            request_expiry: Math.ceil(Date.now() / 1000) + 30,
-            quote_expiry: Math.ceil(Date.now() / 1000) + 120,
-            token_in: inputToken,
-            token_out: outputToken,
-            volume_token_in: amountIn.toString(),
-            volume_token_out_min: outputAmount
-        };
-
-        const { data } = await axios.post(this.url, requestBody, {
-            headers: {
-                "X-API-Key": `${this.apiKey}`,
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        });
-
-        return {
-            outputAmount: amountIn,
+            outputAmount: BigInt(data.volume_token_out),
             to: data.pool_address,
             value: 0,
             data: data.signed_payload
