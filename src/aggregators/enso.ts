@@ -48,11 +48,16 @@ export class EnsoQuoter implements Quoter {
             value: data.tx.value,
             data: data.tx.data,
             price: parseFloat("0"), // TODO: set price
-            gas: BigInt(data.gas)
+            gas: BigInt(data.gas),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest) {
         throw new Error("Doesn't support output -> input just yet");
 
         return {
@@ -61,7 +66,12 @@ export class EnsoQuoter implements Quoter {
             value: 0,
             data: "",
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 

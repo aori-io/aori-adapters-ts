@@ -47,7 +47,12 @@ export class ParaswapQuoter implements Quoter {
         return {
             outputAmount: BigInt(data.priceRoute.destAmount),
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 
@@ -66,7 +71,12 @@ export class ParaswapQuoter implements Quoter {
         return {
             outputAmount: BigInt(data.priceRoute.srcAmount),
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 

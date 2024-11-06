@@ -48,7 +48,12 @@ export class LifiQuoter implements Quoter {
             value: data.transactionRequest.value,
             data: data.transactionRequest.data,
             price: parseFloat(data.estimate.toAmountUSD) / parseFloat(data.estimate.fromAmountUSD),
-            gas: BigInt(data.transactionRequest.gasLimit)
+            gas: BigInt(data.transactionRequest.gasLimit),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 
@@ -61,7 +66,12 @@ export class LifiQuoter implements Quoter {
             value: 0,
             data: "",
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 

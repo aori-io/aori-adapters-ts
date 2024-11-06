@@ -36,7 +36,7 @@ export class ZeroExQuoter implements Quoter {
         return "0x";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 sellToken: inputToken,
@@ -54,11 +54,16 @@ export class ZeroExQuoter implements Quoter {
             value: 0,
             data: data.data,
             price: parseFloat(data.price),
-            gas: BigInt(data.gas)
+            gas: BigInt(data.gas),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         };
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 sellToken: inputToken,
@@ -76,7 +81,12 @@ export class ZeroExQuoter implements Quoter {
             value: 0,
             data: data.data,
             price: parseFloat(data.price),
-            gas: BigInt(data.gas)
+            gas: BigInt(data.gas),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 

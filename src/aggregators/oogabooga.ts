@@ -45,6 +45,11 @@ export class OogaBoogaQuoter implements Quoter {
             outputAmount: BigInt(assumedAmountOut),
             price: parseFloat(price),
             gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         };
     }
 
@@ -55,6 +60,11 @@ export class OogaBoogaQuoter implements Quoter {
             outputAmount: BigInt(0),
             price: 0,
             gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         };
     }
 

@@ -48,7 +48,12 @@ export class OdosQuoter implements Quoter {
         return {
             outputAmount: BigInt(_data.outputTokens[0].amount),
             price: parseFloat("0"),
-            gas: BigInt(_data.transaction.gas)
+            gas: BigInt(_data.transaction.gas),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         };
     }
 
@@ -61,7 +66,12 @@ export class OdosQuoter implements Quoter {
             value: 0,
             data: "",
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 

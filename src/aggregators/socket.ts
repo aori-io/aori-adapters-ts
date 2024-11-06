@@ -58,7 +58,12 @@ export class SocketQuoter implements Quoter {
         return {
             outputAmount: BigInt(data.result.toAmount),
             price: 0,
-            gas: BigInt(data.result.minimumGasBalances[0])
+            gas: BigInt(data.result.minimumGasBalances[0]),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 
@@ -67,7 +72,12 @@ export class SocketQuoter implements Quoter {
         return {
             outputAmount: BigInt(0),
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 

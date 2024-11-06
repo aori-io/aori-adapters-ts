@@ -39,7 +39,12 @@ export class OpenOceanQuoter implements Quoter {
         return {
             outputAmount: BigInt(data.data.outAmount),
             price: parseFloat(data.data.price),
-            gas: BigInt(data.data.estimatedGas)
+            gas: BigInt(data.data.estimatedGas),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         };
     }
 
@@ -52,7 +57,12 @@ export class OpenOceanQuoter implements Quoter {
             value: 0,
             data: "",
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 

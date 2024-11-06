@@ -1,4 +1,4 @@
-import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "../interfaces";
+import { Calldata, DEFAULT_QUOTE, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "../interfaces";
 
 export type Mode = "fast" | "best";
 
@@ -22,22 +22,22 @@ export class MultiQuoter implements Quoter {
     }
 
     async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: OutputAmountRequest) {
-        if (!this.quoters.has(chainId)) return { price: 0, gas: 0n, outputAmount: 0n };
+        if (!this.quoters.has(chainId)) return DEFAULT_QUOTE;
         const allQuotes = this.quoters.get(chainId)!.map(quoter => quoter.getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }));
         try {
             return await Promise.any(allQuotes);
         } catch (error) {
-            return { price: 0, gas: 0n, outputAmount: 0n };
+            return DEFAULT_QUOTE;
         }
     }
 
     async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: InputAmountRequest) {
-        if (!this.quoters.has(chainId)) return { price: 0, gas: 0n, outputAmount: 0n };
+        if (!this.quoters.has(chainId)) return DEFAULT_QUOTE;
         const allQuotes = this.quoters.get(chainId)!.map(quoter => quoter.getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }));
         try {
             return await Promise.any(allQuotes);
         } catch (error) {
-            return { price: 0, gas: 0n, outputAmount: 0n };
+            return DEFAULT_QUOTE;
         }
     }
 

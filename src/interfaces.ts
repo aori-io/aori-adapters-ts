@@ -2,12 +2,12 @@
                                TYPES
 //////////////////////////////////////////////////////////////*/
 
-export interface PriceRequest {
+export type PriceRequest = {
     fromAddress: string;
     inputToken: string;
     outputToken: string;
-    inputAmount?: string;
-    outputAmount?: string;
+    inputAmount?: string | number | bigint;
+    outputAmount?: string | number | bigint;
     chainId: number;
 }
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
@@ -21,11 +21,13 @@ export interface Calldata {
     value: number;
     data: string;
 }
-export type Quote = {
+export type Quote = PriceRequest & {
     outputAmount: bigint;
     price: number;
     gas: bigint;
 }
+
+export const DEFAULT_QUOTE = { price: 0, gas: 0n, outputAmount: 0n, fromAddress: "", inputToken: "", outputToken: "", chainId: 0 };
 
 export interface Quoter {
     name: () => string;

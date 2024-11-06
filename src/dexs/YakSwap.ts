@@ -45,11 +45,16 @@ export class YakSwapQuoter implements Quoter {
             ]),
             outputAmount: amounts[amounts.length - 1],
             price: 0,
-            gas: gasEstimate
+            gas: gasEstimate,
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         };
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest) {
         throw new Error("Not implemented");
 
         return {
@@ -58,7 +63,12 @@ export class YakSwapQuoter implements Quoter {
             value: 0,
             data: "",
             price: 0,
-            gas: BigInt(0)
+            gas: BigInt(0),
+            // 
+            fromAddress,
+            inputToken,
+            outputToken,
+            chainId
         }
     }
 
