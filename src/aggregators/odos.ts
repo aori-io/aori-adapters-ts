@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { Calldata, PriceRequest, Quoter } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quoter } from "../interfaces";
 
 export const ODOS_API_URL = "https://api.odos.xyz";
 

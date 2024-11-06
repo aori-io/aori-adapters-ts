@@ -1,4 +1,4 @@
-import { PriceRequest, Quoter } from "@aori-io/sdk";
+import { PriceRequest, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const LIFI_API_URL = "https://li.quest/v1/quote";

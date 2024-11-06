@@ -1,4 +1,4 @@
-import { Quoter } from "@aori-io/sdk";
+import { Quoter } from "../interfaces";
 
 export const oneForOneQuoterFactory: ((tokenA: string, tokenB: string) => Quoter) = (tokenA, tokenB) => ({
     name: () => "name",

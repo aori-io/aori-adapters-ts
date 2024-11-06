@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Calldata, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quote, Quoter } from "../interfaces";
 
 export const OOGABOOGA_SWAP_API_URL = "https://testnet.api.oogabooga.io/v1/swap/";
 

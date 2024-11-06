@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "../interfaces";
 
 export const SOCKET_API_URL = "https://api.socket.tech/v2";
 

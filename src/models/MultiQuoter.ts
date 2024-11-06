@@ -1,8 +1,8 @@
-import { Calldata, ChainId, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "../interfaces";
 
 export type Mode = "fast" | "best";
 
-export type QuoterMap = Map<number | ChainId, Quoter[]>;
+export type QuoterMap = Map<number, Quoter[]>;
 
 export class MultiQuoter implements Quoter {
     quoters: QuoterMap;

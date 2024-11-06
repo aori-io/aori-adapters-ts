@@ -1,4 +1,4 @@
-import { Calldata, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quote, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const OPENOCEAN_V3_API_URL = "https://open-api.openocean.finance/v3";

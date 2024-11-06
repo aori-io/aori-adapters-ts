@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "@aori-io/sdk";
+import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "../interfaces";
 
 export const VALANTIS_HOT_API_URL = "https://hot.valantis.xyz/solver/order";
 

@@ -1,4 +1,4 @@
-import { OutputAmountRequest, PriceRequest, Quoter } from "@aori-io/sdk";
+import { OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const ZEROX_MAINNET_API_URL = "https://api.0x.org/swap/v1/quote";

@@ -1,4 +1,4 @@
-import { InputAmountRequest, OutputAmountRequest, PriceRequest, Quoter } from "@aori-io/sdk";
+import { InputAmountRequest, OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const CONVEYOR_API_URL = "https://api.conveyor.finance";

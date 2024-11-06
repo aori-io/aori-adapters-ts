@@ -1,4 +1,4 @@
-import { Calldata, PriceRequest, Quoter } from "@aori-io/sdk";
+import { Calldata, PriceRequest, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const PARASWAP_API_URL = "https://apiv5.paraswap.io";
