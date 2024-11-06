@@ -50,6 +50,7 @@ export class EnsoQuoter implements Quoter {
             price: parseFloat("0"), // TODO: set price
             gas: BigInt(data.gas),
             // 
+            inputAmount: BigInt(inputAmount || 0),
             fromAddress,
             inputToken,
             outputToken,
@@ -68,6 +69,7 @@ export class EnsoQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,

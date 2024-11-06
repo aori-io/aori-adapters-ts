@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { Calldata, PriceRequest, Quoter } from "../interfaces";
+import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
 
 export const ODOS_API_URL = "https://api.odos.xyz";
 
@@ -19,7 +19,7 @@ export class OdosQuoter implements Quoter {
         return "odos";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: OutputAmountRequest) {
         const { data } = await axios.post(`${this.url}/sor/quote/v2`, {
             chainId,
             inputTokens: [
@@ -50,6 +50,7 @@ export class OdosQuoter implements Quoter {
             price: parseFloat("0"),
             gas: BigInt(_data.transaction.gas),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -57,7 +58,7 @@ export class OdosQuoter implements Quoter {
         };
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: InputAmountRequest) {
         throw new Error("Doesn't support output -> input just yet");
 
         return {
@@ -68,6 +69,7 @@ export class OdosQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,

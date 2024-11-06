@@ -22,12 +22,13 @@ export interface Calldata {
     data: string;
 }
 export type Quote = PriceRequest & {
+    inputAmount: bigint;
     outputAmount: bigint;
     price: number;
     gas: bigint;
 }
 
-export const DEFAULT_QUOTE = { price: 0, gas: 0n, outputAmount: 0n, fromAddress: "", inputToken: "", outputToken: "", chainId: 0 };
+export const DEFAULT_QUOTE: Quote = { price: 0, gas: 0n, outputAmount: 0n, inputAmount: 0n, fromAddress: "", inputToken: "", outputToken: "", chainId: 0 };
 
 export interface Quoter {
     name: () => string;

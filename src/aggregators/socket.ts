@@ -60,6 +60,7 @@ export class SocketQuoter implements Quoter {
             price: 0,
             gas: BigInt(data.result.minimumGasBalances[0]),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -74,6 +75,7 @@ export class SocketQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,

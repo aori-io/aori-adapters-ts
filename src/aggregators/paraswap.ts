@@ -1,4 +1,4 @@
-import { Calldata, PriceRequest, Quoter } from "../interfaces";
+import { Calldata, OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const PARASWAP_API_URL = "https://apiv5.paraswap.io";
@@ -23,7 +23,7 @@ export class ParaswapQuoter implements Quoter {
         return "paraswap";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, chainId, fromAddress }: OutputAmountRequest) {
         const { data } = await axios.get(`${this.url}/prices`, {
             params: {
                 srcToken: inputToken,
@@ -49,6 +49,7 @@ export class ParaswapQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -73,6 +74,7 @@ export class ParaswapQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,

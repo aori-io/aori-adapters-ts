@@ -111,6 +111,7 @@ export class ValantisQuoter implements Quoter {
             price: parseFloat("0"),
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,

@@ -47,6 +47,7 @@ export class YakSwapQuoter implements Quoter {
             price: 0,
             gas: gasEstimate,
             // 
+            inputAmount: amounts[0],
             fromAddress,
             inputToken,
             outputToken,
@@ -65,6 +66,7 @@ export class YakSwapQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,

@@ -1,4 +1,4 @@
-import { PriceRequest, Quoter } from "../interfaces";
+import { InputAmountRequest, OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const LIFI_API_URL = "https://li.quest/v1/quote";
@@ -26,7 +26,7 @@ export class LifiQuoter implements Quoter {
         return "lifi";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: OutputAmountRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 fromChain: `${chainId}`,
@@ -50,6 +50,7 @@ export class LifiQuoter implements Quoter {
             price: parseFloat(data.estimate.toAmountUSD) / parseFloat(data.estimate.fromAmountUSD),
             gas: BigInt(data.transactionRequest.gasLimit),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -57,7 +58,7 @@ export class LifiQuoter implements Quoter {
         }
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: InputAmountRequest) {
         throw new Error("Doesn't support output -> input just yet");
 
         return {
@@ -68,6 +69,7 @@ export class LifiQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,
@@ -76,7 +78,7 @@ export class LifiQuoter implements Quoter {
     }
 
     async generateCalldata({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
-        const { outputAmount, to, value, data } = await this.getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }); 
+        const { outputAmount, to, value, data } = await this.getOutputAmountQuote({ inputToken, outputToken, inputAmount: inputAmount || 0, fromAddress, chainId }); 
         return {
             to,
             value,

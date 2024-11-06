@@ -36,6 +36,7 @@ export class ConveyorQuoter implements Quoter {
             price: 0,
             gas: BigInt(body.tx.gas),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -53,6 +54,7 @@ export class ConveyorQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,

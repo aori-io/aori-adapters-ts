@@ -1,4 +1,4 @@
-import { OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
+import { InputAmountRequest, OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const ZEROX_MAINNET_API_URL = "https://api.0x.org/swap/v1/quote";
@@ -36,7 +36,7 @@ export class ZeroExQuoter implements Quoter {
         return "0x";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: OutputAmountRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 sellToken: inputToken,
@@ -56,6 +56,7 @@ export class ZeroExQuoter implements Quoter {
             price: parseFloat(data.price),
             gas: BigInt(data.gas),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -63,7 +64,7 @@ export class ZeroExQuoter implements Quoter {
         };
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: InputAmountRequest) {
         const { data } = await axios.get(this.url, {
             params: {
                 sellToken: inputToken,
@@ -83,6 +84,7 @@ export class ZeroExQuoter implements Quoter {
             price: parseFloat(data.price),
             gas: BigInt(data.gas),
             // 
+            inputAmount: BigInt(outputAmount),
             fromAddress,
             inputToken,
             outputToken,

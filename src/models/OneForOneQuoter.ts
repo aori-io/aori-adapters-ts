@@ -12,6 +12,7 @@ export const oneForOneQuoterFactory: ((tokenA: string, tokenB: string) => Quoter
                 value: 0,
                 data: "",
                 // 
+                inputAmount: BigInt(outputAmount),
                 fromAddress,
                 inputToken,
                 outputToken,
@@ -26,6 +27,7 @@ export const oneForOneQuoterFactory: ((tokenA: string, tokenB: string) => Quoter
                 value: 0,
                 data: "",
                 // 
+                inputAmount: BigInt(0),
                 fromAddress,
                 inputToken,
                 outputToken,
@@ -43,6 +45,7 @@ export const oneForOneQuoterFactory: ((tokenA: string, tokenB: string) => Quoter
                 value: 0,
                 data: "",
                 // 
+                inputAmount: BigInt(inputAmount),
                 fromAddress,
                 inputToken,
                 outputToken,
@@ -57,6 +60,7 @@ export const oneForOneQuoterFactory: ((tokenA: string, tokenB: string) => Quoter
                 value: 0,
                 data: "",
                 // 
+                inputAmount: BigInt(0),
                 fromAddress,
                 inputToken,
                 outputToken,

@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import { PriceRequest, Quoter } from "../interfaces";
+import { InputAmountRequest, OutputAmountRequest, PriceRequest, Quoter } from "../interfaces";
 
 export const KYBERSWAP_MAINNET_API_URL = "https://aggregator-api.kyberswap.com/ethereum/api/v1";
 export const KYBERSWAP_ARBITRUM_API_URL = "https://aggregator-api.kyberswap.com/arbitrum/api/v1";
@@ -23,7 +23,7 @@ export class KyberswapQuoter implements Quoter {
         return "kyberswap";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest) {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: OutputAmountRequest) {
         const { data } = await axios.get(`${this.url}/routes`, {
             params: {
                 tokenIn: inputToken,
@@ -45,6 +45,7 @@ export class KyberswapQuoter implements Quoter {
             price: parseFloat("0"), // TODO: 
             gas: BigInt(_data.data.gas),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -52,7 +53,7 @@ export class KyberswapQuoter implements Quoter {
         }
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, fromAddress, chainId }: InputAmountRequest) {
         throw new Error("Doesn't support output -> input just yet");
 
         return {
@@ -60,6 +61,7 @@ export class KyberswapQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,

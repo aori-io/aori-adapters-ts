@@ -1,4 +1,4 @@
-import { Calldata, PriceRequest, Quote, Quoter } from "../interfaces";
+import { Calldata, InputAmountRequest, OutputAmountRequest, PriceRequest, Quote, Quoter } from "../interfaces";
 import axios from "axios";
 
 export const OPENOCEAN_V3_API_URL = "https://open-api.openocean.finance/v3";
@@ -20,7 +20,7 @@ export class OpenOceanQuoter implements Quoter {
         return (this.url == OPENOCEAN_V3_API_URL) ? "openocean-v3" : "openocean-v4";
     }
 
-    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: PriceRequest): Promise<Quote> {
+    async getOutputAmountQuote({ inputToken, outputToken, inputAmount, fromAddress, chainId }: OutputAmountRequest): Promise<Quote> {
         const inputAmountInEther = Number(inputAmount) / 1e18;
 
         const { data } = await axios.get(
@@ -41,6 +41,7 @@ export class OpenOceanQuoter implements Quoter {
             price: parseFloat(data.data.price),
             gas: BigInt(data.data.estimatedGas),
             // 
+            inputAmount: BigInt(inputAmount),
             fromAddress,
             inputToken,
             outputToken,
@@ -48,7 +49,7 @@ export class OpenOceanQuoter implements Quoter {
         };
     }
 
-    async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: PriceRequest) {
+    async getInputAmountQuote({ inputToken, outputToken, outputAmount, chainId, fromAddress }: InputAmountRequest) {
         throw new Error("Doesn't support output -> input just yet");
 
         return {
@@ -59,6 +60,7 @@ export class OpenOceanQuoter implements Quoter {
             price: 0,
             gas: BigInt(0),
             // 
+            inputAmount: BigInt(0),
             fromAddress,
             inputToken,
             outputToken,
