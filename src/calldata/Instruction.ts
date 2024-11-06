@@ -2,7 +2,7 @@ import { AbiCoder } from "ethers";
 
 export type InstructionStruct = {
     to: string;
-    value: bigint;
+    value: bigint | number;
     data: string;
 }
 
