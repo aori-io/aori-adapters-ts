@@ -83,7 +83,7 @@ export class OdosQuoter implements Quoter {
             inputTokens: [
                 {
                     tokenAddress: inputToken,
-                    amount: inputAmount,
+                    amount: inputAmount?.toString(),
                 }
             ],
             outputTokens: [
